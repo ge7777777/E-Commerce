@@ -1,38 +1,62 @@
 const booksWrapper = document.querySelector(".books");
 
-function renderBooks(books) {
-  let booksHTML = "";
-  for (let i = 0; i < books.length; i++) {
-    const book = books[i];
-    booksHTML += `
-      <div class="book">
-        <figure class="book__img--wrapper">
-          <img class="book__img" src="${book.url}" alt="">
-        </figure>
-        <div class="book__title">
-          ${book.title}
-        </div>
-        <div class="book__ratings">
-          ${getRatingHTML(book.rating)}
-        </div>
-        <div class="book__price">
-          ${getPriceHTML(book.originalPrice, book.salePrice)}
-        </div>
-      </div>
-    `;
-  }
-  booksWrapper.innerHTML = booksHTML;
+const books = [
+{
+ title: "Atomic Habits",
+ url: "assets/atomic habits.jpg",
+ originalPrice: 39.95,
+ rating: 5
+},
+{
+ title: "Deep Work",
+ url: "assets/deep work.jpeg",
+ originalPrice: 29.95,
+ salePrice: 12.95,
+ rating: 5
+},
+// rest of books...
+];
+
+function renderBooks(container, books) {
+
+container.innerHTML = books.map(book => `
+<div class="book">
+   <figure class="book__img--wrapper">
+      <img class="book__img" src="${book.url}">
+   </figure>
+
+   <h3 class="book__title">
+      ${book.title}
+   </h3>
+
+   <div class="book__ratings">
+      ${getRatingHTML(book.rating)}
+   </div>
+
+   <div class="book__price">
+      ${book.salePrice 
+        ? `<span class="book__price--normal">$${book.originalPrice}</span> $${book.salePrice}`
+        : `$${book.originalPrice}`
+      }
+   </div>
+
+</div>
+`).join("");
+
 }
 
 function getRatingHTML(rating) {
-  let ratingHTML = "";
-  for (let i = 0; i < Math.floor(rating); i++) {
-    ratingHTML += '<i class="fas fa-star"></i>';
-  }
-  if (rating % 1 !== 0) {
-    ratingHTML += '<i class="fas fa-star-half-alt"></i>';
-  }
-  return ratingHTML;
+ let stars = "";
+
+ for(let i = 0; i < Math.floor(rating); i++) {
+   stars += '<i class="fas fa-star"></i>';
+ }
+
+ if(rating % 1 !== 0){
+   stars += '<i class="fas fa-star-half-alt"></i>';
+ }
+
+ return stars;
 }
 
 function getPriceHTML(originalPrice, salePrice) {
